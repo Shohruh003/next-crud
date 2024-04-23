@@ -6,7 +6,6 @@ import UserTable from "@/components/UserTable/UserTable";
 const Home: React.FC = () => {  
     return (
       <Box>
-        <Header/>
         <UserTable/>
       </Box>
     );
