@@ -15,11 +15,11 @@ interface Column {
 
 const columns: readonly Column[] = [
   { id: 'number', label: '#', minWidth: 50 },
-  { id: 'image', label: 'Image', minWidth: 100 },
-  { id: 'name', label: 'Full Name', minWidth: 170 },
-  { id: 'phone', label: 'Phone Number', minWidth: 170 },
-  { id: 'gmail', label: 'Gmail', minWidth: 170 },
-  { id: 'position', label: 'Position', minWidth: 170 },
+  { id: 'image', label: 'Фото', minWidth: 100 },
+  { id: 'name', label: 'Фамилия и имя', minWidth: 170 },
+  { id: 'phone', label: 'Номер телефона', minWidth: 170 },
+  { id: 'gmail', label: 'Электронная почта', minWidth: 170 },
+  { id: 'position', label: 'Должность', minWidth: 170 },
   { id: 'editIcon', label: '', minWidth: 10 },
   { id: 'deleteIcon', label: '', minWidth: 10 },
 ];
@@ -142,14 +142,14 @@ function Header() {
               <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 10px', borderBottom: '3px solid black', boxShadow: '0px 1px 10px 1px', marginBottom: '20px'}}>
           <TextField
             id="outlined-basic"
-            label='golobal search'
+            label='Глобальный поиск'
             size="small"
             variant="outlined"
           />
 
         <FormControl sx={{minWidth: '120px'}} size='small'>
           <InputLabel id="demo-select-small-label">
-            smena
+          Смена
           </InputLabel>
           <Select
             labelId="demo-select-small-label"
@@ -165,7 +165,7 @@ function Header() {
   
         <Box>
           <span style={{fontWeight: 700}}>
-            gender
+          по полу:
           </span>
           <Checkbox
             {...label}
@@ -176,7 +176,7 @@ function Header() {
             value="true"
           />
           <span style={{fontWeight: 700}}>
-            M
+          М
           </span>
           <Checkbox
             {...label}
@@ -187,13 +187,13 @@ function Header() {
             value="false"
           />
           <span style={{fontWeight: 700}}>
-            W
+          Ж
           </span>
         </Box>
 
         <Button variant="contained" color="success">
           <span style={{marginRight: '5px'}}>
-            Add
+          Добавить
           </span>
           <AddCircleIcon/>
         </Button>
