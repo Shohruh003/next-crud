@@ -17,10 +17,12 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import ModalClose from '@mui/joy/ModalClose';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
 
 
 const AddUsersModal = () => {
   const language = localStorage.getItem('language');
+  const modalState = useSelector(state => state.common.modalState)
   const [values, setValues] = useState({
     full_name: '',
     phone_number: '',
@@ -48,14 +50,14 @@ const AddUsersModal = () => {
     });
   };
 
-  const handleClose = () => {
-    setAddUsersModal(false);
-  };
+//   const handleClose = () => {
+//     setAddUsersModal(false);
+//   };
 
   return (
     <Modal
-      open={addUsersModal}
-      onClose={handleClose}
+      open={modalState}
+      onClose={modalState}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
