@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import axios from "axios";
 import EditUsersModal from "@/Modal/EditUserModal";
 import DeleteUserModal from "@/Modal/DeleteUserModal";
 import {
@@ -24,6 +23,7 @@ import {
 } from "@/store/common";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Image from "next/image";
+import api from "@/api/api";
 
 interface Column {
   id:
@@ -108,10 +108,8 @@ const UserTable: React.FC = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(
-        "https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users"
-      )
+    api
+      .get("users/")
       .then((response) => {
         dispatch(toggleUsers(response.data));
       })

@@ -20,7 +20,7 @@ import Image from "next/image";
 import { IFormModal } from "@/types/interfaces";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleEditModal } from "@/store/common";
-import axios from "axios";
+import api from "@/api/api";
 
 const EditUsersModal = () => {
   const dispatch = useAppDispatch();
@@ -102,19 +102,13 @@ const EditUsersModal = () => {
         formData.append("image", values.image);
       }
 
-      const response = await axios.put(
-        `https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users/${user?.id}/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log(response.data);
+      const response = await api.put(`users/${user?.id}/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       dispatch(toggleEditModal(false));
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setErrors({

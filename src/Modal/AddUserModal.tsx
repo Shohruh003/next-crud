@@ -20,7 +20,7 @@ import { ModalClose } from "@mui/joy";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { IFormModal } from "@/types/interfaces";
 import { toggleModal } from "@/store/common";
-import axios from "axios";
+import api from "@/api/api";
 
 const AddUsersModal = () => {
   const modalState = useAppSelector((state) => state.common.modalState);
@@ -65,10 +65,7 @@ const AddUsersModal = () => {
         formData.append(key, values[key]);
       }
 
-      const response = await axios.post(
-        "https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users",
-        formData
-      );
+      const response = await api.post("users/", formData);
 
       setValues({
         full_name: "",
@@ -79,8 +76,6 @@ const AddUsersModal = () => {
         shift: "",
         image: null,
       });
-      console.log(response.data);
-
       dispatch(toggleModal(false));
       window.location.reload();
     } catch (error) {

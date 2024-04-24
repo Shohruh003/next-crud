@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Modal, Button, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleDeleteModal } from "@/store/common";
-import axios from "axios";
+import api from "@/api/api";
 
 const DeleteUserModal = () => {
   const dispatch = useAppDispatch();
@@ -16,10 +16,7 @@ const DeleteUserModal = () => {
 
   const handleDeleteUser = async () => {
     try {
-      const response = await axios.delete(
-        `https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users/${user?.id}/`
-      );
-      console.log(response.data);
+      const response = await api.delete(`users/${user?.id}/`);
       dispatch(toggleDeleteModal(false));
       window.location.reload();
     } catch (error) {
