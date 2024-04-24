@@ -17,6 +17,8 @@ import { toggleDeleteModal, toggleEditModal } from "@/store/common";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Image from "next/image";
 import axios from "axios";
+import EditUsersModal from "@/Modal/EditUserModal";
+import DeleteUserModal from "@/Modal/DeleteUserModal";
 
 interface Column {
   id:
@@ -71,7 +73,10 @@ function createData(
 
 const UserTable: React.FC = () => {
   const dispatch = useAppDispatch();
-  const open = useAppSelector((state) => state.common.deleteModalState);
+  const openEditModal = useAppSelector((state) => state.common.editModalState);
+  const openDeleteModal = useAppSelector(
+    (state) => state.common.deleteModalState
+  );
   const handleDeleteModalOpen = () => {
     dispatch(toggleDeleteModal(true));
   };
@@ -144,66 +149,67 @@ const UserTable: React.FC = () => {
   // );
 
   return (
-<>
-{open && <AddUsersModal />}
-<Paper
-      sx={{
-        width: "100%",
-      }}
-    >
-      <TableContainer>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.number}
+    <>
+      {openEditModal && <EditUsersModal />}
+      {openDeleteModal && <DeleteUserModal />}
+      <Paper
+        sx={{
+          width: "100%",
+        }}
+      >
+        <TableContainer>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
                   >
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
-</>
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.number}
+                    >
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </>
   );
 };
 

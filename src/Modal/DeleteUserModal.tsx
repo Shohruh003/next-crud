@@ -3,11 +3,11 @@ import { Box, Typography, Modal, Button, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleDeleteModal } from "@/store/common";
 
-const DeleteModal = () => {
+const DeleteUserModal = () => {
+  const dispatch = useAppDispatch();
   const deleteModalState = useAppSelector(
     (state) => state.common.deleteModalState
   );
-  const dispatch = useAppDispatch();
 
   const handleClose = () => {
     dispatch(toggleDeleteModal(false));
@@ -66,4 +66,4 @@ const DeleteModal = () => {
   );
 };
 
-export default DeleteModal;
+export default DeleteUserModal;
