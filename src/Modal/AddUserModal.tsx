@@ -79,7 +79,10 @@ const AddUsersModal = () => {
         shift: "",
         image: null,
       });
+      console.log(response.data);
+
       dispatch(toggleModal(false));
+      window.location.reload();
     } catch (error) {
       console.error("Error adding user:", error);
     }

@@ -2,26 +2,30 @@ import React from "react";
 import { Box, Typography, Modal, Button, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleDeleteModal } from "@/store/common";
+import axios from "axios";
 
 const DeleteUserModal = () => {
   const dispatch = useAppDispatch();
   const deleteModalState = useAppSelector(
     (state) => state.common.deleteModalState
   );
-
+  const user = useAppSelector((state) => state.common.userId);
   const handleClose = () => {
     dispatch(toggleDeleteModal(false));
   };
-  //   const deletePupils = async () => {
-  //     try {
-  //       const response = await api.delete(`/Workers/${editUsers?.id}/`);
-  //       console.log(response.data);
-  //       dispatch(toggleDeleteModal(false));
-  //       window.location.reload();
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+
+  const handleDeleteUser = async () => {
+    try {
+      const response = await axios.delete(
+        `https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users/${user?.id}/`
+      );
+      console.log(response.data);
+      dispatch(toggleDeleteModal(false));
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const style = {
     position: "absolute",
@@ -53,7 +57,11 @@ const DeleteUserModal = () => {
             direction="row"
             spacing={2}
           >
-            <Button variant="contained" color="success">
+            <Button
+              onClick={handleDeleteUser}
+              variant="contained"
+              color="success"
+            >
               Да
             </Button>
             <Button onClick={handleClose} variant="outlined" color="error">

@@ -1,4 +1,5 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Paper,
@@ -12,13 +13,17 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import React, { useEffect, useState } from "react";
-import { toggleDeleteModal, toggleEditModal } from "@/store/common";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import Image from "next/image";
 import axios from "axios";
 import EditUsersModal from "@/Modal/EditUserModal";
 import DeleteUserModal from "@/Modal/DeleteUserModal";
+import {
+  toggleDeleteModal,
+  toggleEditModal,
+  toggleUserId,
+  toggleUsers,
+} from "@/store/common";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import Image from "next/image";
 
 interface Column {
   id:
@@ -74,19 +79,22 @@ function createData(
 const UserTable: React.FC = () => {
   const dispatch = useAppDispatch();
   const openEditModal = useAppSelector((state) => state.common.editModalState);
+  const users = useAppSelector((state) => state.common.users);
   const openDeleteModal = useAppSelector(
     (state) => state.common.deleteModalState
   );
-  const handleDeleteModalOpen = () => {
+  const handleDeleteModalOpen = (user: string) => {
     dispatch(toggleDeleteModal(true));
+    dispatch(toggleUserId(user));
   };
-  const handleEditModalOpen = () => {
+  const handleEditModalOpen = (user: string) => {
     dispatch(toggleEditModal(true));
+    dispatch(toggleUserId(user));
   };
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [users, setUsers] = React.useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [users, setUsers] = useState([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -101,52 +109,35 @@ const UserTable: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("https://66288ac854afcabd07361701.mockapi.io/api/shokh/users")
+      .get(
+        "https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users"
+      )
       .then((response) => {
-        console.log(response.data);
-
-        setUsers(response.data);
+        dispatch(toggleUsers(response.data));
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [dispatch]);
 
   const rows = Array.isArray(users)
     ? users.map((e, index) =>
         createData(
           index + 1,
-          // <Image src={e?.image} width={40} height={40} alt="Avatar" />,
+          <Image src={e?.image} width={40} height={40} alt="Avatar" />,
           e?.full_name,
           e?.phone_number,
           e?.email,
           e?.status,
-          <Box onClick={handleEditModalOpen}>
+          <Box onClick={() => handleEditModalOpen(e)}>
             <EditIcon sx={{ zIndex: 2, cursor: "pointer" }} />
           </Box>,
-          <Box onClick={handleDeleteModalOpen}>
+          <Box onClick={() => handleDeleteModalOpen(e)}>
             <DeleteIcon sx={{ zIndex: 2, cursor: "pointer" }} />
           </Box>
         )
       )
     : [];
-
-  // const rows = [...Array(6)].map(() =>
-  //   createData(
-  //     1,
-  //     "image",
-  //     "Shohruh Azimov",
-  //     "+998942720705",
-  //     "shohruhazimob0705@email.com",
-  //     "web developer",
-  //     <Box onClick={handleEditModalOpen}>
-  //       <EditIcon sx={{ zIndex: 2, cursor: "pointer" }} />
-  //     </Box>,
-  //     <Box onClick={handleDeleteModalOpen}>
-  //       <DeleteIcon sx={{ zIndex: 2, cursor: "pointer" }} />
-  //     </Box>
-  //   )
-  // );
 
   return (
     <>

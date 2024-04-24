@@ -4,13 +4,21 @@ let initialState = {
   modalState: false,
   deleteModalState: false,
   editModalState: false,
+  userId: null,
+  users: [],
 };
 
 let name = "common";
 
 export const {
   reducer: commonReducers,
-  actions: { toggleModal, toggleDeleteModal, toggleEditModal },
+  actions: {
+    toggleModal,
+    toggleDeleteModal,
+    toggleEditModal,
+    toggleUserId,
+    toggleUsers,
+  },
 } = createSlice({
   initialState,
   name,
@@ -23,6 +31,12 @@ export const {
     },
     toggleEditModal(state, action) {
       state.editModalState = action.payload;
+    },
+    toggleUserId(state, action) {
+      state.userId = action.payload;
+    },
+    toggleUsers(state, action) {
+      state.users = action.payload;
     },
   },
 });

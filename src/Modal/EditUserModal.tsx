@@ -20,10 +20,13 @@ import Image from "next/image";
 import { IFormModal } from "@/types/interfaces";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleEditModal } from "@/store/common";
+import axios from "axios";
 
 const EditUsersModal = () => {
-  const editModalState = useAppSelector((state) => state.common.editModalState);
   const dispatch = useAppDispatch();
+  const editModalState = useAppSelector((state) => state.common.editModalState);
+  const user = useAppSelector((state) => state.common.userId);
+
   const [values, setValues] = useState<IFormModal>({
     full_name: "",
     phone_number: "",
@@ -35,33 +38,32 @@ const EditUsersModal = () => {
   });
   const [errors, setErrors] = useState({});
 
-  //   useEffect(() => {
-  //     if (editUsersModal && editUsers) {
-  //       if (editUsers) {
-  //         setValues((prevValues) => ({
-  //           ...prevValues,
-  //           full_name: editUsers.full_name || "",
-  //           phone_number: editUsers.phone_number || "",
-  //           email: editUsers.email || "",
-  //           status: editUsers.status || "",
-  //           gender: String(editUsers.gender) || "",
-  //           shift: editUsers.shift || "",
-  //           their_reason: editUsers.their_reason || "",
-  //         }));
+  useEffect(() => {
+    if (editModalState && user) {
+      if (user) {
+        setValues((prevValues) => ({
+          ...prevValues,
+          full_name: user.full_name || "",
+          phone_number: user.phone_number || "",
+          email: user.email || "",
+          status: user.status || "",
+          gender: user.gender === false ? "false" : "true" || "",
+          shift: user.shift || "",
+        }));
 
-  //         if (editUsers.image instanceof File) {
-  //           const reader = new FileReader();
-  //           reader.onloadend = () => {
-  //             setValues((prevValues) => ({
-  //               ...prevValues,
-  //               image: reader.result,
-  //             }));
-  //           };
-  //           reader.readAsDataURL(editUsers.image);
-  //         }
-  //       }
-  //     }
-  //   }, []);
+        if (user.image instanceof File) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setValues((prevValues) => ({
+              ...prevValues,
+              image: reader.result,
+            }));
+          };
+          reader.readAsDataURL(user.image);
+        }
+      }
+    }
+  }, [editModalState, user]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -87,39 +89,42 @@ const EditUsersModal = () => {
     dispatch(toggleEditModal(false));
   };
 
-  //   const addPupil = async () => {
-  //     try {
-  //       const formData = new FormData();
-  //       for (const key in values) {
-  //         if (values[key]) {
-  //           formData.append(key, values[key]);
-  //         }
-  //       }
+  const handleEditUser = async () => {
+    try {
+      const formData = new FormData();
+      for (const key in values) {
+        if (values[key]) {
+          formData.append(key, values[key]);
+        }
+      }
 
-  //       // Rasmni yuborish
-  //       if (values.image) {
-  //         formData.append("image", values.image);
-  //       }
+      if (values.image) {
+        formData.append("image", values.image);
+      }
 
-  //       const response = await api.patch(`/Workers/${editUsers?.id}/`, formData, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       });
+      const response = await axios.put(
+        `https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users/${user?.id}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-  //       console.log(response.data);
-  //       setEditUsersModal(false);
-  //       window.location.reload();
-  //     } catch (error) {
-  //       if (error.response && error.response.status === 400) {
-  //         setErrors({
-  //           ...errors,
-  //           email: ["Please include an '@' in the email address"],
-  //         });
-  //       }
-  //       console.error(error);
-  //     }
-  //   };
+      console.log(response.data);
+      dispatch(toggleEditModal(false));
+      // window.location.reload();
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setErrors({
+          ...errors,
+          email: ["Please include an '@' in the email address"],
+        });
+      }
+      console.error(error);
+    }
+  };
 
   return (
     <div>
@@ -150,11 +155,13 @@ const EditUsersModal = () => {
 
           <Image
             src={
-              values.image instanceof File
-                ? URL.createObjectURL(values.image)
-                : values
+              values?.image
+                ? URL.createObjectURL(values?.image)
+                : user && user.image
             }
             alt="Selected"
+            width={40}
+            height={40}
             style={{
               width: "100px",
               height: "100px",
@@ -195,10 +202,10 @@ const EditUsersModal = () => {
               variant="outlined"
               onChange={handleChange}
               value={values.email}
-              //   error={errors.email && true}
-              //   helperText={
-              //     errors.email ? "Please include an '@' in the email address" : ""
-              //   }
+              error={errors.email && true}
+              helperText={
+                errors.email ? "Please include an '@' in the email address" : ""
+              }
             />
             <TextField
               sx={{ width: "100%", marginBottom: "20px" }}
@@ -272,7 +279,7 @@ const EditUsersModal = () => {
 
             <Button
               sx={{ width: "100%" }}
-              //   onClick={addPupil}
+              onClick={handleEditUser}
               variant="contained"
               color="success"
             >
