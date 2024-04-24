@@ -23,6 +23,8 @@ import {
 } from "@/store/common";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import api from "@/api/api";
+import { IFormModal } from "@/types/interfaces";
+import Image from "next/image";
 
 interface Column {
   id:
@@ -82,18 +84,17 @@ const UserTable: React.FC = () => {
   const openDeleteModal = useAppSelector(
     (state) => state.common.deleteModalState
   );
-  const handleDeleteModalOpen = (user: string) => {
+  const handleDeleteModalOpen = (user: IFormModal) => {
     dispatch(toggleDeleteModal(true));
-    dispatch(toggleUserId(user));
+    dispatch(toggleUserId(user.id));
   };
-  const handleEditModalOpen = (user: string) => {
+  const handleEditModalOpen = (user: IFormModal) => {
     dispatch(toggleEditModal(true));
     dispatch(toggleUserId(user));
   };
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // const [users, setUsers] = useState([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -118,10 +119,10 @@ const UserTable: React.FC = () => {
   }, [dispatch]);
 
   const rows = Array.isArray(users)
-    ? users.map((e, index) =>
+    ? users.map((e: IFormModal, index) =>
         createData(
           index + 1,
-          <img src={e?.image} width={40} height={40} alt="ebwjb" />,
+          <Image src={e && e?.image} width={40} height={40} alt="avatar" />,
           <Box>{e && e.full_name}</Box>,
           <Box>{e && e.phone_number}</Box>,
           <Box>{e && e.email}</Box>,

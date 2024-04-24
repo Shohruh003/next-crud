@@ -17,10 +17,8 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import ModalClose from "@mui/joy/ModalClose";
 import Image from "next/image";
-import { IFormModal } from "@/types/interfaces";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleEditModal } from "@/store/common";
-import axios from "axios";
 import api from "@/api/api";
 
 const EditUsersModal = () => {
@@ -28,7 +26,7 @@ const EditUsersModal = () => {
   const editModalState = useAppSelector((state) => state.common.editModalState);
   const user = useAppSelector((state) => state.common.userId);
 
-  const [values, setValues] = useState<IFormModal>({
+  const [values, setValues] = useState({
     full_name: "",
     phone_number: "",
     email: "",
@@ -81,7 +79,7 @@ const EditUsersModal = () => {
     if (file) {
       setValues((prevValues) => ({
         ...prevValues,
-        image: file,
+        image: null,
       }));
     }
   };
@@ -166,8 +164,8 @@ const EditUsersModal = () => {
           />
           <Box sx={{ marginTop: "20px" }}>
             <TextField
+              id="outlined-size-small"
               sx={{ width: "100%", marginBottom: "20px" }}
-              id="full_name"
               size="small"
               name="full_name"
               label="Фамилия и имя"
@@ -189,8 +187,8 @@ const EditUsersModal = () => {
             />
 
             <TextField
+              id="outlined-size-small"
               sx={{ width: "100%", margin: "20px 0" }}
-              id="email"
               size="small"
               name="email"
               label="Электронная почта"
@@ -203,8 +201,8 @@ const EditUsersModal = () => {
               }
             />
             <TextField
+              id="outlined-size-small"
               sx={{ width: "100%", marginBottom: "20px" }}
-              id="status"
               size="small"
               name="status"
               label="Должность"

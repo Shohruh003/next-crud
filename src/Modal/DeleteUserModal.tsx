@@ -9,14 +9,16 @@ const DeleteUserModal = () => {
   const deleteModalState = useAppSelector(
     (state) => state.common.deleteModalState
   );
-  const user = useAppSelector((state) => state.common.userId);
+  const userId = useAppSelector((state) => state.common.userId);
+  console.log(userId);
+
   const handleClose = () => {
     dispatch(toggleDeleteModal(false));
   };
 
   const handleDeleteUser = async () => {
     try {
-      const response = await api.delete(`users/${user?.id}/`);
+      const response = await api.delete(`users/${userId}/`);
       dispatch(toggleDeleteModal(false));
       window.location.reload();
     } catch (error) {

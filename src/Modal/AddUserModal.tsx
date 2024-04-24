@@ -18,14 +18,13 @@ import "react-phone-input-2/lib/style.css";
 import Image from "next/image";
 import { ModalClose } from "@mui/joy";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { IFormModal } from "@/types/interfaces";
 import { toggleModal } from "@/store/common";
 import api from "@/api/api";
 
 const AddUsersModal = () => {
   const modalState = useAppSelector((state) => state.common.modalState);
   const dispatch = useAppDispatch();
-  const [values, setValues] = useState<IFormModal>({
+  const [values, setValues] = useState({
     full_name: "",
     phone_number: "",
     email: "",
@@ -34,7 +33,6 @@ const AddUsersModal = () => {
     shift: "",
     image: null,
   });
-  const [errors, setErrors] = useState({});
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
