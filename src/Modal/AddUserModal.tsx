@@ -20,11 +20,12 @@ import { ModalClose } from "@mui/joy";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleModal } from "@/store/common";
 import api from "@/api/api";
+import { IFormModal } from "@/types/interfaces";
 
 const AddUsersModal = () => {
   const modalState = useAppSelector((state) => state.common.modalState);
   const dispatch = useAppDispatch();
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<IFormModal>({
     full_name: "",
     phone_number: "",
     email: "",

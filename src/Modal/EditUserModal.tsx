@@ -33,7 +33,7 @@ const EditUsersModal = () => {
     status: "",
     gender: "",
     shift: "",
-    image: null,
+    image: "",
   });
   const [errors, setErrors] = useState({});
 
