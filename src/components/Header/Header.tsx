@@ -15,11 +15,13 @@ import React, { useState } from "react";
 import AddUsersModal from "@/Modal/AddUserModal";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleModal, toggleUsers } from "@/store/common";
+import { IFormModal } from "@/types/interfaces";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.common.modalState);
   const users = useAppSelector((state) => state.common.users);
+  const [selectedShift, setSelectedShift] = useState("");
   const [maleChecked, setMaleChecked] = useState(false);
   const [femaleChecked, setFemaleChecked] = useState(false);
 
@@ -33,7 +35,7 @@ const Header: React.FC = () => {
       dispatch(toggleUsers(users));
       return;
     }
-    const filteredData = users?.filter((user: UserData) =>
+    const filteredData = users?.filter((user: IFormModal) =>
       user.full_name.toLowerCase().includes(inputValue.toLowerCase())
     );
 
@@ -45,7 +47,7 @@ const Header: React.FC = () => {
   const handleGenderChange = () => {
     let filteredData = users;
 
-    filteredData = users?.filter((user: UserData) => {
+    filteredData = users?.filter((user: IFormModal) => {
       if (maleChecked && user.gender === "male") return true;
       if (femaleChecked && user.gender === "female") return true;
       return false;
@@ -54,14 +56,16 @@ const Header: React.FC = () => {
     dispatch(toggleUsers(filteredData));
   };
 
-  const handleSmenaChange = (selectedShift: number) => {
-    if (selectedShift === 0) {
+  const handleSmenaChange = (selectedShift: string) => {
+    setSelectedShift(selectedShift);
+
+    if (selectedShift === "") {
       dispatch(toggleUsers(users));
       return;
     }
 
     const filteredData = users?.filter(
-      (user: UserData) => user.shift === selectedShift.toString()
+      (user: IFormModal) => user.shift === selectedShift
     );
     dispatch(toggleUsers(filteredData));
   };
@@ -90,18 +94,20 @@ const Header: React.FC = () => {
         <FormControl sx={{ minWidth: "120px" }} size="small">
           <InputLabel id="demo-select-small-label">Смена</InputLabel>
           <Select
-            onChange={(e) => handleSmenaChange(e.target.value)}
+            value={selectedShift}
+            onChange={(e) => handleSmenaChange(e.target.value as string)}
+            label="Смена"
             labelId="demo-select-small-label"
             id="demo-select-small"
-            label="Смена"
             autoWidth
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            <MenuItem value="">Все</MenuItem>
+            <MenuItem value="1">1</MenuItem>
+            <MenuItem value="2">2</MenuItem>
+            <MenuItem value="3">3</MenuItem>
           </Select>
         </FormControl>
-        <Box>
+        <Box onChange={handleGenderChange}>
           <span style={{ fontWeight: 700 }}>по полу:</span>
           <Checkbox
             {...label}

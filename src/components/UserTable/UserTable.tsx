@@ -22,7 +22,6 @@ import {
   toggleUsers,
 } from "@/store/common";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import Image from "next/image";
 import api from "@/api/api";
 
 interface Column {
@@ -122,11 +121,11 @@ const UserTable: React.FC = () => {
     ? users.map((e, index) =>
         createData(
           index + 1,
-          <Image src={e?.image} width={40} height={40} alt="Avatar" />,
-          e?.full_name,
-          e?.phone_number,
-          e?.email,
-          e?.status,
+          <img src={e?.image} width={40} height={40} alt="ebwjb" />,
+          <Box>{e && e.full_name}</Box>,
+          <Box>{e && e.phone_number}</Box>,
+          <Box>{e && e.email}</Box>,
+          <Box>{e && e.status}</Box>,
           <Box onClick={() => handleEditModalOpen(e)}>
             <EditIcon sx={{ zIndex: 2, cursor: "pointer" }} />
           </Box>,

@@ -30,7 +30,7 @@ const AddUsersModal = () => {
     phone_number: "",
     email: "",
     status: "",
-    gender: true,
+    gender: "",
     shift: "",
     image: null,
   });
@@ -72,7 +72,7 @@ const AddUsersModal = () => {
         phone_number: "",
         email: "",
         status: "",
-        gender: true,
+        gender: "",
         shift: "",
         image: null,
       });

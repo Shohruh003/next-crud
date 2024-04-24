@@ -20,6 +20,7 @@ import Image from "next/image";
 import { IFormModal } from "@/types/interfaces";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleEditModal } from "@/store/common";
+import axios from "axios";
 import api from "@/api/api";
 
 const EditUsersModal = () => {
@@ -32,7 +33,7 @@ const EditUsersModal = () => {
     phone_number: "",
     email: "",
     status: "",
-    gender: true,
+    gender: "",
     shift: "",
     image: null,
   });
@@ -47,7 +48,7 @@ const EditUsersModal = () => {
           phone_number: user.phone_number || "",
           email: user.email || "",
           status: user.status || "",
-          gender: user.gender === false ? "false" : "true" || "",
+          gender: user.gender || "",
           shift: user.shift || "",
         }));
 
