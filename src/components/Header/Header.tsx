@@ -18,7 +18,7 @@ import { toggleModal } from "@/store/common";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
-  const open = useAppSelector(state => state.common.modalState)
+  const open = useAppSelector((state) => state.common.modalState);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const handleOpen = () => {
     dispatch(toggleModal(true));
@@ -74,11 +74,7 @@ const Header: React.FC = () => {
           />
           <span style={{ fontWeight: 700 }}>Ж</span>
         </Box>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={handleOpen}
-        >
+        <Button variant="contained" color="success" onClick={handleOpen}>
           <span style={{ marginRight: "5px" }}>Добавить</span>
           <AddCircleIcon />
         </Button>
@@ -87,5 +83,4 @@ const Header: React.FC = () => {
   );
 };
 
-//haa chunarli ulgurasiz Hudo holasa, hozir open ga o'xshab man yana shundayini yasab olishim kkmi, delete modal uchun alohida, edit modal uchun alohida,
 export default Header;

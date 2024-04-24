@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
-import React from 'react';
-import Header from "@/components/Header/Header";
+import React from "react";
 import UserTable from "@/components/UserTable/UserTable";
 
-const Home: React.FC = () => {  
-    return (
-      <Box>
-        <UserTable/>
-      </Box>
-    );
-}
-  
+const Home: React.FC = () => {
+  return (
+    <Box>
+      <UserTable />
+    </Box>
+  );
+};
+
 export default Home;

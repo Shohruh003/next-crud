@@ -5,6 +5,5 @@ export interface IFormModal {
     status: string,
     gender: boolean,
     shift: string,
-    their_reason: string,
     image: null | File | string,
 }

@@ -16,13 +16,13 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Image from "next/image";
-import {ModalClose} from "@mui/joy"
+import { ModalClose } from "@mui/joy";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { IFormModal } from "@/types/interfaces";
 import { toggleModal } from "@/store/common";
+import axios from "axios";
 
 const AddUsersModal = () => {
-  const language = localStorage.getItem("language");
   const modalState = useAppSelector((state) => state.common.modalState);
   const dispatch = useAppDispatch();
   const [values, setValues] = useState<IFormModal>({
@@ -32,7 +32,6 @@ const AddUsersModal = () => {
     status: "",
     gender: true,
     shift: "",
-    their_reason: "",
     image: null,
   });
   const [errors, setErrors] = useState({});
@@ -48,7 +47,6 @@ const AddUsersModal = () => {
   const handleImageChange = ({
     target: { files },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    //dobavit button qatta=> headerda
     const file = files ? files[0] : null;
     setValues({
       ...values,
@@ -58,6 +56,33 @@ const AddUsersModal = () => {
 
   const handleClose = () => {
     dispatch(toggleModal(false));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      for (const key in values) {
+        formData.append(key, values[key]);
+      }
+
+      const response = await axios.post(
+        "https://mycorse.onrender.com/https://66288ac854afcabd07361701.mockapi.io/api/shokh/users",
+        formData
+      );
+
+      setValues({
+        full_name: "",
+        phone_number: "",
+        email: "",
+        status: "",
+        gender: true,
+        shift: "",
+        image: null,
+      });
+      dispatch(toggleModal(false));
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
   };
 
   return (
@@ -93,6 +118,8 @@ const AddUsersModal = () => {
                 : values.image
             }
             alt="Selected"
+            width={100}
+            height={100}
             style={{ width: "100px", marginTop: "10px", objectFit: "cover" }}
           />
         )}
@@ -105,6 +132,7 @@ const AddUsersModal = () => {
             label="Фамилия и имя"
             variant="outlined"
             onChange={handleChange}
+            value={values.full_name}
           />
 
           <PhoneInput
@@ -113,11 +141,11 @@ const AddUsersModal = () => {
             country="uz"
             inputClass="form-control"
             containerClass="react-tel-input"
-            inputStyle={{ width: "100%", height: "100%" }}
+            inputStyle={{ width: "100%", height: "40px" }}
           />
 
           <TextField
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={{ width: "100%", margin: "20px 0" }}
             id="email"
             size="small"
             name="email"
@@ -135,6 +163,7 @@ const AddUsersModal = () => {
             label="Должность"
             variant="outlined"
             onChange={handleChange}
+            value={values.status}
           />
           <Box
             sx={{
@@ -167,7 +196,7 @@ const AddUsersModal = () => {
               <RadioGroup
                 aria-labelledby="demo-controlled-radio-buttons-group"
                 name="gender"
-                value={values.gender}
+                value={values.gender.toString()}
                 onChange={handleChange}
                 sx={{ flexDirection: "row" }}
               >
@@ -184,7 +213,12 @@ const AddUsersModal = () => {
             ВЫБРАТЬ ФОТО
             <input type="file" hidden onChange={handleImageChange} />
           </Button>
-          <Button sx={{ width: "100%" }} variant="contained" color="success">
+          <Button
+            sx={{ width: "100%" }}
+            variant="contained"
+            color="success"
+            onClick={handleSubmit}
+          >
             СОХРАНИТЬ
           </Button>
         </Box>
