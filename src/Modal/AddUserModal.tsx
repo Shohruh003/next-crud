@@ -26,6 +26,7 @@ const AddUsersModal = () => {
   const modalState = useAppSelector((state) => state.common.modalState);
   const dispatch = useAppDispatch();
   const [values, setValues] = useState<IFormModal>({
+    id:"",
     full_name: "",
     phone_number: "",
     email: "",

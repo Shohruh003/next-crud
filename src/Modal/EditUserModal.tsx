@@ -20,22 +20,24 @@ import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleEditModal } from "@/store/common";
 import api from "@/api/api";
+import { IFormModal } from "@/types/interfaces";
 
 const EditUsersModal = () => {
   const dispatch = useAppDispatch();
   const editModalState = useAppSelector((state) => state.common.editModalState);
-  const user = useAppSelector((state) => state.common.userId);
+  const user = useAppSelector(
+    (state) => state.common.userId
+  ) as IFormModal | null;
 
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<IFormModal>({
     full_name: "",
     phone_number: "",
     email: "",
     status: "",
     gender: "",
     shift: "",
-    image: "",
+    image: null,
   });
-  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (editModalState && user) {
@@ -109,12 +111,6 @@ const EditUsersModal = () => {
       dispatch(toggleEditModal(false));
       window.location.reload();
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setErrors({
-          ...errors,
-          email: ["Please include an '@' in the email address"],
-        });
-      }
       console.error(error);
     }
   };
@@ -195,10 +191,6 @@ const EditUsersModal = () => {
               variant="outlined"
               onChange={handleChange}
               value={values.email}
-              error={errors.email && true}
-              helperText={
-                errors.email ? "Please include an '@' in the email address" : ""
-              }
             />
             <TextField
               id="outlined-size-small"
